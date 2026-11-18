@@ -78,3 +78,10 @@ func (s Status) String() string {
 		return "UNKNOWN_ORDER_STATUS"
 	}
 }
+
+type Product struct {
+	Name        string
+	Description string
+	Value       Money
+	SKU         string
+}

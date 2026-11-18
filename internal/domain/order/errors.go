@@ -8,7 +8,7 @@ type InvalidMoneyAmountError struct {
 }
 
 func (e *InvalidMoneyAmountError) Error() string {
-	return fmt.Sprintf("invalid amount %d, cents %d", e.Amount, e.Cents)
+	return fmt.Sprintf("invalid monetary value received: amount: %d, cents: %d", e.Amount, e.Cents)
 }
 
 type InvalidCurrencyError struct {
@@ -16,5 +16,5 @@ type InvalidCurrencyError struct {
 }
 
 func (e *InvalidCurrencyError) Error() string {
-	return fmt.Sprintf("invalid currency: %s", e.Currency)
+	return fmt.Sprintf("invalid currency received: %s", e.Currency)
 }
