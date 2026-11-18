@@ -4,13 +4,13 @@ import "slices"
 
 var ValidCurrencies = []string{"BRL", "USD", "EUR", "GBP", "JPY"}
 
-type Money struct {
+type Value struct {
 	Amount   uint8
 	Cents    uint8
 	Currency string
 }
 
-func NewMoney(amount, cents uint8, currency string) (*Money, error) {
+func NewValue(amount, cents uint8, currency string) (*Value, error) {
 	if amount < 1 || cents < 1 {
 		return nil, &InvalidMoneyAmountError{Cents: cents, Amount: amount}
 	}
@@ -19,7 +19,7 @@ func NewMoney(amount, cents uint8, currency string) (*Money, error) {
 		return nil, &InvalidCurrencyError{Currency: currency}
 	}
 
-	return &Money{
+	return &Value{
 		Amount:   amount,
 		Cents:    cents,
 		Currency: currency,
@@ -82,6 +82,15 @@ func (s Status) String() string {
 type Product struct {
 	Name        string
 	Description string
-	Value       Money
+	Value       *Value
 	SKU         string
+}
+
+func NewProduct(name, description string, value *Value, sku string) *Product {
+	return &Product{
+		Name:        name,
+		Description: description,
+		Value:       value,
+		SKU:         sku,
+	}
 }
