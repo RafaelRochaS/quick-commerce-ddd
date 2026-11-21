@@ -1,20 +1,38 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
 
 	"github.com/RafaelRochaS/quick-commerce-ddd/internal/domain/order"
+	"github.com/RafaelRochaS/quick-commerce-ddd/internal/infra/repository"
+	"github.com/RafaelRochaS/quick-commerce-ddd/internal/infra/services"
 )
 
 func main() {
 	log.Println("Testing order aggregate:")
 
+	createdOrder, err := createOrder()
+
+	if err != nil {
+		log.Fatal("failed to create order:", err)
+	}
+
+	err = placeOrder(createdOrder)
+
+	if err != nil {
+		log.Fatal("failed to handle order:", err)
+	}
+
+}
+
+func createOrder() (*order.Order, error) {
 	productCost, err := order.NewValue(12, 5, "BRL")
 
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	orderAddress := order.NewShippingAddress("Brasil",
@@ -34,4 +52,13 @@ func main() {
 	fmt.Println()
 
 	log.Printf("Created new order: %s", string(b))
+
+	return newOrder, nil
+}
+
+func placeOrder(readyOrder *order.Order) error {
+	handler := order.NewPlaceOrderHandler(repository.NewSQL(), services.NewObsService())
+	cmd := order.NewPlaceOrderCmd(readyOrder, context.Background())
+
+	return handler.Handle(cmd)
 }
