@@ -14,13 +14,14 @@ import (
 func main() {
 	log.Println("Testing order aggregate:")
 
+	ctx := context.Background()
 	createdOrder, err := createOrder()
 
 	if err != nil {
 		log.Fatal("failed to create order:", err)
 	}
 
-	err = placeOrder(createdOrder)
+	err = placeOrder(createdOrder, ctx)
 
 	if err != nil {
 		log.Fatal("failed to handle order:", err)
@@ -41,12 +42,19 @@ func createOrder() (*order.Order, error) {
 		"Rua",
 		"123123-101",
 		1)
+
 	productOrder := order.NewProduct("ProdutoA",
 		"produto de teste",
 		productCost,
 		"123-123-123-123")
 	itemOrder := order.NewItem(123, productOrder, orderAddress)
 	newOrder := order.NewOrder(itemOrder)
+
+	id := newOrder.AggregateID()
+	log.Println("New order original id var:", id)
+	id = 123123
+	log.Println("Altered id var:", id)
+	log.Println("Function calling:", newOrder.AggregateID())
 
 	b, _ := json.MarshalIndent(newOrder, "", "  ")
 	fmt.Println()
@@ -56,9 +64,15 @@ func createOrder() (*order.Order, error) {
 	return newOrder, nil
 }
 
-func placeOrder(readyOrder *order.Order) error {
-	handler := order.NewPlaceOrderHandler(repository.NewSQL(), services.NewObsService())
-	cmd := order.NewPlaceOrderCmd(readyOrder, context.Background())
+func placeOrder(readyOrder *order.Order, ctx context.Context) error {
+	db, err := repository.NewSQL(ctx)
+
+	if err != nil {
+		return err
+	}
+
+	handler := order.NewPlaceOrderHandler(db, services.NewObsService())
+	cmd := order.NewPlaceOrderCmd(readyOrder, ctx)
 
 	return handler.Handle(cmd)
 }

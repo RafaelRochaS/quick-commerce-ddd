@@ -19,6 +19,7 @@ func (h *PlaceOrderHandler) Handle(cmd *PlaceOrderCmd) error {
 		return err
 	}
 
+	// if this has an error, needs a complimentary transaction to remove the placed order on the repository. Better to use Transactional Outbox
 	err = h.eventService.SendMessage("order created", NewCreatedEvent(*cmd.Order).String())
 
 	return err

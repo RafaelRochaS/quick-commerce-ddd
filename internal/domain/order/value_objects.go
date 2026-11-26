@@ -5,9 +5,9 @@ import "slices"
 var ValidCurrencies = []string{"BRL", "USD", "EUR", "GBP", "JPY"}
 
 type Value struct {
-	Amount   uint8
-	Cents    uint8
-	Currency string
+	amount   uint8
+	cents    uint8
+	currency string
 }
 
 func NewValue(amount, cents uint8, currency string) (*Value, error) {
@@ -20,29 +20,29 @@ func NewValue(amount, cents uint8, currency string) (*Value, error) {
 	}
 
 	return &Value{
-		Amount:   amount,
-		Cents:    cents,
-		Currency: currency,
+		amount:   amount,
+		cents:    cents,
+		currency: currency,
 	}, nil
 }
 
 type ShippingAddress struct {
-	Country  string
-	State    string
-	City     string
-	Street   string
-	Number   int8
-	Postcode string
+	country  string
+	state    string
+	city     string
+	street   string
+	number   int8
+	postcode string
 }
 
 func NewShippingAddress(country, state, city, street, postcode string, number int8) *ShippingAddress {
 	return &ShippingAddress{
-		Country:  country,
-		State:    state,
-		City:     city,
-		Street:   street,
-		Number:   number,
-		Postcode: postcode,
+		country:  country,
+		state:    state,
+		city:     city,
+		street:   street,
+		number:   number,
+		postcode: postcode,
 	}
 }
 
@@ -80,17 +80,17 @@ func (s Status) String() string {
 }
 
 type Product struct {
-	Name        string
-	Description string
-	Value       *Value
-	SKU         string
+	name        string
+	description string
+	value       *Value
+	sku         string
 }
 
 func NewProduct(name, description string, value *Value, sku string) *Product {
 	return &Product{
-		Name:        name,
-		Description: description,
-		Value:       value,
-		SKU:         sku,
+		name:        name,
+		description: description,
+		value:       value,
+		sku:         sku,
 	}
 }

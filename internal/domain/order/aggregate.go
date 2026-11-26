@@ -1,13 +1,17 @@
 package order
 
 type Order struct {
-	Id   Id
-	Item *Item
+	id   Id
+	item *Item
 }
 
 func NewOrder(item *Item) *Order {
 	return &Order{
-		Id:   123456,
-		Item: item,
+		id:   123456,
+		item: item,
 	}
+}
+
+func (o *Order) AggregateID() Id {
+	return o.id
 }

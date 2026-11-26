@@ -11,5 +11,5 @@ func NewCreatedEvent(o Order) *Created {
 }
 
 func (c Created) String() string {
-	return fmt.Sprintf("OrderId: %d\nItemId: %d", c.Order.Id, c.Order.Item.Id)
+	return fmt.Sprintf("OrderId: %d\nItemId: %d", c.Order.id, c.Order.item.id)
 }
